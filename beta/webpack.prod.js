@@ -1,3 +1,4 @@
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 
@@ -12,8 +13,20 @@ module.exports = {
           "alpha@https://micro-frontends-demo-alpha.netlify.app/remoteEntry.js",
       },
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: "public/**/*",
+          to: "[name][ext]",
+          globOptions: {
+            ignore: ["**/index.html"],
+          },
+        },
+      ],
+    }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
+      inject: true,
     }),
   ],
   module: {
@@ -27,5 +40,8 @@ module.exports = {
         },
       },
     ],
+  },
+  output: {
+    clean: true,
   },
 };
